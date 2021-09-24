@@ -13,14 +13,15 @@ private:
 	char validation;
 	std::string nom;
 	clock_t temps;
-public: 
+public:
 	void Generation();
 	void Nombre();
 	void Noms();
 	void PropositionsAffichage();
-//	void PetitScore();
+	void PetitScore();
+	void trie();
+	void tableau();
 
 
 
 };
-
