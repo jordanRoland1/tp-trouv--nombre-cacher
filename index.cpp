@@ -6,13 +6,13 @@
 #include <vector>
 using namespace std;
 std::fstream fichier("score.txt");
-vector<std::string> tableau1;
+vector<float> tempsDeFin;
+vector<std::string> nomsFin;
 std::string ligne;
-
 void index::Generation()
 {
-		srand(time(NULL));
-		nombreCacher = rand() % 100;
+	srand(time(NULL));
+	nombreCacher = rand() % 100;
 }
 
 void index::Nombre()
@@ -50,48 +50,71 @@ void index::Noms()
 
 	std::cout << "Quelle est votre nom ? " << std::endl;
 	std::cin >> nom;
-
-	myfile << (double)temps / CLOCKS_PER_SEC << " " << nom << std::endl;
-
+	double temps1 = (double)temps / CLOCKS_PER_SEC;
+	myfile << std::endl << (double)temps / CLOCKS_PER_SEC << " " << nom;
+	tempsDeFin.push_back(temps1);
+	nomsFin.push_back(nom);
 	myfile.close();
 }
 
-//void index::PetitScore()
-//{
-//	while (std::getline(fichier, ligne))
-//	{
-//		tableau1.push_back(ligne);
-//	}
-	
-//	for (int i = 0; i < tableau1.size(); i++)
-//	{
-//		cout << "Le " << i << " du jeu est " << tableau1[i] << endl;
-//	}
-//}
+void index::tableau()
+{
+	float temp;
+	string nomJoueurs;
+	while (!fichier.eof())
+	{
+		fichier >> temp >> nomJoueurs;
+		tempsDeFin.push_back(temp);
+		nomsFin.push_back(nomJoueurs);
+	}
 
+}
+void index::PetitScore()
+{
+		cout << "Le premier du jeu est " << nomsFin[0] << " avec comme temps : " << tempsDeFin[0] << endl;
+}
 
+void index::trie()
+{
+	int passage = 0;
+	bool permutation = true;
+	int en_cours;
+	while (permutation == true)
+	{
+		permutation = false;
+		passage++;
+		for (en_cours = 0; en_cours<tempsDeFin.size() - passage; en_cours++)
+		{
+			if (tempsDeFin[en_cours]>tempsDeFin[en_cours + 1])
+			{
+				permutation = true;
+				float temp = tempsDeFin[en_cours];
+				tempsDeFin[en_cours] = tempsDeFin[en_cours + 1];
+				tempsDeFin[en_cours + 1] = temp;
+				string temp1 = nomsFin[en_cours];
+				nomsFin[en_cours] = nomsFin[en_cours + 1];
+				nomsFin[en_cours + 1] = temp1;
+			}
+		}
+	}
+}
 
 
 void index::PropositionsAffichage()
 {
-// cette boucle s'arrête dès qu'une erreur de lecture survient 
-	while (std::getline(fichier, ligne))
-	{
-			tableau1.push_back(ligne);
-	}
 	std::cout << "Voulez-vous afficher toutes les statistique du jeu ? Y or N" << std::endl;
-	std::cin >> validation;
-	if (validation == 'Y')
+	std::cin >> validation;	// demande
+	if (validation == 'Y' || validation == 'y')        // validation de d'afficher             
 	{
-		std::cout << " affichage des 3 premiers du jeu" << std::endl;
-		for (int i = 0; i < tableau1.size() ; i++)
+		std::cout << " affichage des statistiques du jeu" << std::endl; //
+		for (int i = 0; i < tempsDeFin.size(); i++)	// affichage de tout les valeur du tableau
 		{
-			cout << "Le " << i << " du jeu est " << tableau1[i] << endl;
+			cout << "Le " << i << " du jeu est " << nomsFin[i] << " avec comme temps : " << tempsDeFin[i] << endl;
 		}
 	}
-	if (validation == 'N')
+	if (validation == 'N' || validation == 'n') //validation de ne pas afficher. 
 	{
-		std::cout << "Vous avez pas voulu afficher toutes les statistique du jeu" << std::endl;
+		std::cout << "Vous avez pas voulu afficher toutes les statistique du jeu" << std::endl; //
 	}
 	fichier.close();
 }
