@@ -2,10 +2,13 @@
 int main()
 {
 	index idx;
-//	idx.PetitScore();
+	idx.tableau();
+	idx.trie();
+	idx.PetitScore();
 	idx.Generation();
 	idx.Nombre();
 	idx.Noms();
+	idx.trie();
 	idx.PropositionsAffichage();
 	return 0;
 }
